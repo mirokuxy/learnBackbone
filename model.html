@@ -1,0 +1,98 @@
+<html>
+
+<head>
+<script src='./jquery-1.11.3.min.js'></script>
+<script src='./underscore-min.js'></script>
+<script src='./backbone-min.js'></script>
+
+</head>
+
+<body>
+
+
+<script>
+var Human = Backbone.Model.extend({
+	defaults: {
+		name: 'Fetus',
+		age: 0,
+		child: ''
+	},
+	validate: function( attributes, options ){ // fire invalid event when return non-null
+		console.log('validating');
+		if( attributes.age < 0 && attributes.name !== 'Dr'){
+			console.log('inside validating');
+			return 'Error: negative age:' + attributes.age;
+		}
+	},
+	initialize: function(){
+		console.log('welcome to this world');
+		//console.log(this.get('name'),this.get('age'));
+		this.on('change:name', function(model){
+			console.log('changed my name to ' + model.get('name'));
+		});
+		this.on('invalid', function(model, error){
+			console.log(error);
+		})
+	},
+	adopt: function( childName ){
+		this.set({ child: childName });
+	}
+});
+
+//var human = new Human({ name: 'thomas', age: 67});	// {} set first, initialize() called later
+//console.log(human.name, human.age);
+
+var girl = new Human();
+//girl.set({ name: 'sasha', age:18});	// initialize() called first, {} set later
+//console.log(girl.get('name'), girl.get('age'));
+console.log(girl.toJSON());
+girl.set({ age: -1}, {validate: true});
+girl.set({ age: -2});
+girl.set({ age: -3, name: 'Dr'}, {validate: true});
+
+
+// ---------------------------------
+
+/*
+var UserModel = Backbone.Model.extend({
+	urlRoot: '/user',
+	defaults: {
+		name: '',
+		age: ''
+	}
+});
+
+var user = new UserModel();
+var userDetail = {
+	name: 'xiao',
+	age: 39
+};
+
+
+user.save(userDetail, {
+	success: function(user){
+		console.log(user.toJSON());  // .toJSON() returns attributes
+	}
+});
+
+var user = new UserModel({id: 1});
+
+user.fetch({
+	success: function(user){
+		console.log(user.toJSON());
+	}
+});
+
+user.destroy({
+	success: function(){
+		console.log('Destroyed');
+	}
+});
+*/
+
+
+
+</script>
+</body>
+
+</html>

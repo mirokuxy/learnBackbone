@@ -1,0 +1,48 @@
+<html>
+
+<head>
+<script src='./jquery-1.11.3.min.js'></script>
+<script src='./underscore-min.js'></script>
+<script src='./backbone-min.js'></script>
+
+</head>
+
+<body>
+
+
+
+
+
+
+<script>
+var AppRouter = Backbone.Router.extend({
+	routes: {
+		'posts/:id': 'getPost',
+		'download/*path': 'downloadFile',
+		':route/:action': 'loadView',
+		'*actions': 'defaultRoute'
+	}
+});
+
+var appRouter = new AppRouter;
+
+appRouter.on('route:getPost', function(id){
+	console.log('post number: ', id);
+});
+appRouter.on('route:downloadFile',function(path){
+	console.log('path: ', path);
+});
+appRouter.on('route:loadView',function(route,action){
+	console.log(route + '_' + action);
+});
+appRouter.on('route:defaultRoute', function(actions){
+	console.log(actions);
+});
+
+Backbone.history.start();
+
+</script>
+
+</body>
+
+</html>
